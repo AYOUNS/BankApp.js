@@ -44,135 +44,55 @@ btnScrollTo.addEventListener("click", function (e) {
 //     document.querySelector(id).scrollIntoView({ behavior: "smooth" });
 //   });
 // });
-document.querySelector(".nav__link").addEventListener("click", function (e) {
+
+//1-Add event listner to common parent element
+//2-Determine whar element originated the event
+
+document.querySelector(".nav__links").addEventListener("click", function (e) {
   e.preventDefault();
 
   //Matching strategy
   if (e.target.classList.contains("nav__link")) {
     const id = e.target.getAttribute("href");
-    document.querySelector(id).scrollIntoView();
-    {
-      behavior: "smooth";
-    }
+    document.querySelector(id).scrollIntoView({
+      behavior: "smooth",
+    });
   }
 });
-// console.log(document.documentElement); //to select all HTML page
-// console.log(document.head); //to select head in HTML page
-// console.log(document.body); //to select body in HTML page
+//Tabbed component
+tabsContainer.addEventListener("click", function (e) {
+  const clicked = e.target.closest(".operations__tab");
+  console.log(clicked);
+  //Guard clause
+  if (!clicked) return; //if nothing clicked just finish this function
+  //Remove Active classes
+  tabs.forEach((t) => t.classList.remove("operations__tab--active"));
+  tabsContent.forEach((c) => c.classList.remove("operations__content--active"));
+  //Active Tab
+  clicked.classList.add("operations__tab--active");
+  //Activate content area
+  document
+    .querySelector(`.operations__content--${clicked.dataSet.tab}`)
+    .classList.add("operations__content--active");
+});
 
-// document.querySelector(".header"); //to select the header of the page
-// document.querySelectorAll(".section"); //to select the section with class called section of the page return nodelist
+//Menu fade animation
+const handleHover = function (e) {
+  if (e.target.classList.contains("nav__link")) {
+    const link = e.target;
+    const siblings = link.closest(".nav").querySelector(".nav__link");
+    const logo = link.closest(".nav").querySelector("img");
 
-// document.getElementById("section--1"); //to select element by id
-// document.getElementsByTagName("button"); //to select by the name of the tag return htmlcollection
+    siblings.forEach((el) => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+//passing 'argument' into handler
+nav.addEventListener("mouseover", handleHover.bind(0.5));
 
-// document.getElementsByClassName("btn"); //to select the element using classname
-
-// // creating and inserting element
-// // .insertAdejecentHTML
-
-const message = document.createElement("div"); //will return a DOM element
-// message.classList.add("cookie-message"); //to add the class
-// message.innerHTML =
-//   'we use cookied for improved functionality and analytics <button class = "btn btn--close-cookie">Got it!</button>';
-
-// header.prepend(message); //add the element as a first child
-// header.append(message); //add the element as a last child
-// header.append(message.cloneNode(true)); //to append in the first and last child
-
-// header.before(message); //add before header element
-// header.after(message); //add after header element
-
-// //Delete elements
-// document
-//   .querySelector(".btn--clise-cookie")
-//   .addEventListener("click", function () {
-//     message.remove();
-//     message.parentElement.removeChild(message); //the same of .remove()
-//   });
-
-//styles
-// message.style.backgroundColor = "#37383d";
-// message.style.width = "120%";
-
-// console.log(getComputedStyle(message).color);
-// console.log(getComputedStyle(message).height);
-
-// message.style.height =
-//   Number.parseFloat(getComputedStyle(message).height) + 30 + "px";
-
-// document.documentElement.style.setProperty("--color-primary", "orangered"); //to change color
-
-// //Attributes
-// const logo = document.querySelector(".nav__logo");
-// console.log(logo.alt);
-// console.log(logo.src);
-// console.log(logo.className);
-
-// logo.alt = "beautiful minimalist logo";
-
-// //non standard
-// console.log(logo.designer);
-// console.log(logo.getAttribute("designer"));
-// logo.setAttribute("company", "Bankist");
-
-// console.log(logo.src);
-// console.log(logo.getAttribute("src"));
-
-// const link = document.querySelector(".nav__link--btn");
-
-// console.log(link.href);
-// console.log(link.getAttribute("href"));
-
-// //data attributes
-// console.log(logo.dataset.versionNumber);
-
-// //classes
-
-// logo.classList.add("c", "j");
-// logo.classList.remove("c", "j");
-// logo.classList.toggle("c");
-// logo.classList.contains("c"); //not inclides
-
-// //Don't use this
-// logo.className = "jonas";
-
-// const btnScrollTo = document.querySelector(".btn--scroll-to");
-// const section1 = document.querySelector("#section--1");
-
-// const h1 = document.querySelector("h1");
-// const alertH1 = function (e) {
-//   alert("addeventlistner : great! you are reading the heading :D");
-//   //h1.removeEventListener("mouseenter", alertH1);
-// };
-
-// h1.addEventListener("mouseenter", alertH1);
-
-// setTimeout(() => h1.removeEventListener("mouseenter", alertH1), 3000);
-
-// //old school ways
-// // h1.onmouseenter = function (e) {
-// //   alert("addeventlistner : great! you are reading the heading :D");
-// // };
-
-// const randomInt = (min, max) =>
-//   Math.floor(Math.random() * (max - min + 1) + min);
-// const randomColor = () =>
-//   `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
-
-// document.querySelector(".nav__link").addEventListener("click", function (e) {
-//   this.style.backgroundColor = randomColor();
-//   console.log("container", e.target, e.currentTarget);
-
-//   //stop propagation
-//   //e.stopPropagation();
-// });
-
-// document.querySelector(".nav__links").addEventListener("click", function (e) {
-//   this.style.backgroundColor = randomColor();
-// });
-
-// document.querySelector(".nav").addEventListener("click", function (e) {}, true); //true --> not to listen to bubbling event but to capturing events
+nav.addEventListener("mouseout", handleHover.bind(1));
 
 ///////////////////////////////////////
 // Modal window
@@ -198,3 +118,69 @@ document.addEventListener("keydown", function (e) {
     closeModal();
   }
 });
+// //sticky navigation
+// const intitialCoords = section1.getBoundingClientRect();
+// console.log(intitialCoords);
+// window.addEventListener("scroll", function (e) {
+//   console.log(this.window.scrollY);
+//   if (this.window.screenY > intitialCoords.top) nav.classList.add("sticky");
+//   else nav.classList.remove("sticky");
+// });
+
+//Sticky Navigation : Intersection Observer API
+
+const obsCallback = function (entries, observer) {
+  entries.forEach((entry) => {
+    console.log(entry);
+  });
+};
+
+const obsOptions = {
+  root: null,
+  threshold: 0.1,
+};
+
+const observer = new IntersectionObserver(obsCallback, obsOptions);
+observer.observe(section1);
+
+const header = document.querySelector(".header");
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  nav.classList.add("sticky");
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+});
+
+headerObserver.observe(header);
+// const h1 = document.querySelector("h1");
+// //Going downwards : child
+// console.log(h1.querySelectorAll(".highlight"));
+// console.log(h1.childNodes);
+// console.log(h1.children);
+// h1.firstElementChild.style.color = "white";
+// h1.lastElementChild.style.color = "orangered";
+
+// //Going upwords : parents
+// console.log(h1.parentNode);
+// console.log(h1.parentElement);
+
+//it select a colsest header to h1 element,
+//so the closest parent element that has the selected class ".header" and applied the action on it
+// h1.closest(".header").style.background = "var(--gradient-secondary)";
+// //it will call the element it self
+// h1.closest("h1").style.background = "var(--gradient-primary)";
+
+//Going sideways : siblings
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
+//to get all children of the parent not only previus and next  (trick about sibling)
+// console.log(h1.parentElement.children);
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (el !== h1) el.style.tranform = "scale(0.5)";
+// });
